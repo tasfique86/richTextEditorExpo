@@ -1,4 +1,4 @@
-import { TipTapEditor } from "@/components/tipTap2";
+import { TipTapEditor } from "@/components/tipTapEditor";
 import React from "react";
 import { View } from "react-native";
 

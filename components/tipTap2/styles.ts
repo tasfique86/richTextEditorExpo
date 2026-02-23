@@ -177,8 +177,9 @@ export const EDITOR_STYLES = `
 }
 .tiptap-ui-container.no-scroll { overflow: hidden; }
 
-.tiptap-ui-container .toolbar{ background:var(--bg-toolbar); border-bottom:1px solid var(--border); position:sticky; top:0; left:0; right:0; z-index:40; margin-top: 10px; margin-right: 10px; margin-left: 10px; }
-.tiptap-ui-container .toolbar-inner{ padding:6px 10px; display:flex; align-items:flex-start; gap:10px; flex-wrap:wrap; }
+/* Keyboard accessory toolbar: hidden by default, JS shows it when keyboard is open */
+.tiptap-ui-container .toolbar{ display:none; background:var(--bg-toolbar); border-top:1px solid var(--border); border-bottom:none; position:fixed; bottom:0; left:0; right:0; z-index:1000; padding-bottom:env(safe-area-inset-bottom,0px); box-shadow:0 -2px 12px rgba(0,0,0,0.08); transition: bottom 0.15s ease; }
+.tiptap-ui-container .toolbar-inner{ padding:6px 10px; display:flex; align-items:flex-start; gap:10px; flex-wrap:wrap; overflow-x:auto; }
 .tiptap-ui-container .toolbar-left{display:flex;flex-direction:column;gap:6px;flex:1 1 auto;min-width:0;}
 .tiptap-ui-container .toolbar-top-row{display:flex;align-items:center;justify-content:space-between;gap:10px;}
 .tiptap-ui-container .toolbar-title{font-size:13px;font-weight:600;color:var(--text);}
@@ -215,7 +216,8 @@ export const EDITOR_STYLES = `
 .tiptap-ui-container .toolbar-hint{font-size:11px;color:var(--muted);white-space:nowrap;}
 @media (max-width:720px){.tiptap-ui-container .toolbar-hint{display:none;}}
 
-.tiptap-ui-container .editor-main { padding: 20px 0; overflow-y: auto; flex-grow: 1; position: relative; border-radius: 0 0 16px 16px; }
+/* Add bottom padding so content is not hidden behind the fixed toolbar */
+.tiptap-ui-container .editor-main { padding: 20px 0 80px 0; overflow-y: auto; flex-grow: 1; position: relative; border-radius: 0 0 16px 16px; }
 .tiptap-ui-container .tiptap { min-height: 100%; outline: none; padding: 0 24px 20px 54px; }
 .tiptap-ui-container .editor-card.view-mode .tiptap{cursor:default;}
 

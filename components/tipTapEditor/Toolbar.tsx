@@ -31,7 +31,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({ editor, onImageClick }) => {
     editor
       .chain()
       .focus()
-      .insertTable({ rows: 2, cols: 2, withHeaderRow: true })
+      .insertTable({ rows: 2, cols: 2, withHeaderRow: false })
       .run();
 
   const setLink = () => {

@@ -51,6 +51,44 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
 
+  // Keyboard accessory: track visualViewport to keep toolbar above keyboard
+  useLayoutEffect(() => {
+    const vv = window.visualViewport;
+    if (!vv) return;
+
+    const repositionToolbar = () => {
+      const toolbar = document.querySelector<HTMLElement>(".toolbar");
+      if (!toolbar) return;
+
+      const keyboardHeight = Math.max(
+        0,
+        window.innerHeight - vv.height - vv.offsetTop,
+      );
+
+      const isKeyboardOpen = keyboardHeight > 50; // threshold to avoid false positives
+
+      // Show toolbar only when keyboard is open
+      toolbar.style.display = isKeyboardOpen ? "flex" : "none";
+      toolbar.style.bottom = `${keyboardHeight}px`;
+
+      // Adjust editor-main padding
+      const editorMain = document.querySelector<HTMLElement>(".editor-main");
+      if (editorMain) {
+        const toolbarHeight = isKeyboardOpen ? toolbar.offsetHeight || 48 : 0;
+        editorMain.style.paddingBottom = `${toolbarHeight + keyboardHeight + 16}px`;
+      }
+    };
+
+    vv.addEventListener("resize", repositionToolbar);
+    vv.addEventListener("scroll", repositionToolbar);
+    repositionToolbar();
+
+    return () => {
+      vv.removeEventListener("resize", repositionToolbar);
+      vv.removeEventListener("scroll", repositionToolbar);
+    };
+  }, []);
+
   const [, setUpdateCount] = useState<number>(0);
 
   const editor = useEditor({
@@ -82,14 +120,12 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({
   return (
     <div className="tiptap-ui-container" ref={containerRef}>
       <div className="editor-card edit-mode">
-        <Toolbar editor={editor} />
-        <main
-          className="editor-main"
-          //  style={{ background: "red", marginLeft: "10px", marginRight: "10px" }}
-        >
+        <main className="editor-main">
           <EditorContent editor={editor} />
         </main>
       </div>
+      {/* Toolbar is position:fixed so it always sits above the keyboard */}
+      <Toolbar editor={editor} />
     </div>
   );
 };
