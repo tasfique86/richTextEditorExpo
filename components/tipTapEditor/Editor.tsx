@@ -2,7 +2,6 @@
 
 import Highlight from "@tiptap/extension-highlight";
 import Image from "@tiptap/extension-image";
-import Link from "@tiptap/extension-link";
 import { Table } from "@tiptap/extension-table";
 import TableCell from "@tiptap/extension-table-cell";
 import TableHeader from "@tiptap/extension-table-header";
@@ -10,7 +9,6 @@ import TableRow from "@tiptap/extension-table-row";
 import TaskItem from "@tiptap/extension-task-item";
 import TaskList from "@tiptap/extension-task-list";
 import TextAlign from "@tiptap/extension-text-align";
-import Underline from "@tiptap/extension-underline";
 import { Editor, EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Compressor from "compressorjs";
@@ -98,9 +96,7 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({
         },
         suggestion: suggestions,
       }),
-      Underline,
       Highlight,
-      Link.configure({ openOnClick: true, linkOnPaste: true }),
       TextAlign.configure({ types: ["heading", "paragraph"] }),
       Table.configure({ resizable: true }),
       TableRow,
