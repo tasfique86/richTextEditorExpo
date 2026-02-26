@@ -5,7 +5,13 @@ import { View } from "react-native";
 export default function Index() {
   return (
     <View style={{ flex: 1 }}>
-      <TipTapEditor name="Tasfique" />
+      <TipTapEditor
+        name="Tasfique"
+        onSave={(content) => {
+          //console.log("Editor content saved:", content);
+          alert("Content saved successfully!");
+        }}
+      />
     </View>
   );
 }

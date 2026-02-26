@@ -4,4 +4,6 @@ export interface TipTapEditorProps {
   initialContentFormat?: "html" | "markdown";
   onSave?: (content: string) => void;
   theme?: "light" | "dark";
+  readOnly?: boolean;
+  initialEditMode?: boolean;
 }

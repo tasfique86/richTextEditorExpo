@@ -92,9 +92,12 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({
   initialContent = markdownContent,
   initialContentFormat = "markdown",
   theme = "light",
-  //  onSave,
+  onSave,
+  readOnly = false,
+  initialEditMode = false,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [isEditable, setIsEditable] = useState(initialEditMode && !readOnly);
 
   useLayoutEffect(() => {
     if (!document.getElementById("tiptap-editor-styles")) {
@@ -159,6 +162,11 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({
       const toolbar = document.querySelector<HTMLElement>(".toolbar");
       if (!toolbar) return;
 
+      if (!isEditable) {
+        toolbar.style.display = "none";
+        return;
+      }
+
       // More robust keyboard detection:
       // 1. Difference between window height and visual viewport height
       // 2. Account for offsetTop which changes during scroll/pan
@@ -189,7 +197,7 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({
       vv.removeEventListener("resize", repositionToolbar);
       vv.removeEventListener("scroll", repositionToolbar);
     };
-  }, []);
+  }, [isEditable]);
 
   const isMounted = useRef(true);
   const [, setUpdateCount] = useState<number>(0);
@@ -207,6 +215,7 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({
   }, []);
 
   const editor = useEditor({
+    editable: isEditable,
     extensions: [
       StarterKit.configure({ heading: { levels: [1, 2, 3] } }),
       TaskList,
@@ -265,18 +274,95 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({
       },
     },
   });
+
+  const handleSave = () => {
+    if (editor) {
+      const content = editor.getHTML();
+      onSave?.(content);
+      setIsEditable(false);
+      editor.setOptions({ editable: false });
+    }
+  };
+
+  const handleEdit = () => {
+    setIsEditable(true);
+    editor?.setOptions({ editable: true });
+  };
+
   return (
     <div className="tiptap-ui-container" ref={containerRef}>
-      <div className="editor-card edit-mode">
+      <div className={`editor-card ${isEditable ? "edit-mode" : "view-mode"}`}>
+        <header
+          style={{
+            padding: "10px 20px",
+            borderBottom: "1px solid var(--border)",
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center",
+            gap: "10px",
+            background: "var(--bg-toolbar)",
+          }}
+        >
+          <span
+            style={{
+              marginRight: "auto",
+              fontSize: "14px",
+              fontWeight: 600,
+              color: "var(--text)",
+            }}
+          >
+            {name}'s Editor
+          </span>
+          {!readOnly && (
+            <>
+              {isEditable ? (
+                <button
+                  className="btn is-active"
+                  onClick={handleSave}
+                  style={{
+                    padding: "6px 16px",
+                    borderRadius: "8px",
+                    fontSize: "13px",
+                    fontWeight: 600,
+                    background: "var(--accent)",
+                    color: "white",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  Save
+                </button>
+              ) : (
+                <button
+                  className="btn"
+                  onClick={handleEdit}
+                  style={{
+                    padding: "6px 16px",
+                    borderRadius: "8px",
+                    fontSize: "13px",
+                    fontWeight: 600,
+                    background: "var(--bg-card)",
+                    border: "1px solid var(--border)",
+                    cursor: "pointer",
+                  }}
+                >
+                  Edit
+                </button>
+              )}
+            </>
+          )}
+        </header>
         <main className="editor-main">
           <EditorContent editor={editor} />
         </main>
       </div>
       {/* Toolbar is position:fixed so it always sits above the keyboard */}
-      <Toolbar
-        editor={editor}
-        onImageClick={() => editor && triggerImagePicker(editor)}
-      />
+      {isEditable && (
+        <Toolbar
+          editor={editor}
+          onImageClick={() => editor && triggerImagePicker(editor)}
+        />
+      )}
     </div>
   );
 };
