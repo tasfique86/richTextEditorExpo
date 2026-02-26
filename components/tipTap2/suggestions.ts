@@ -34,10 +34,13 @@ const suggestions = {
       "Meryl Streep",
       "Grace Jones",
       "Tasfique Rishad",
+      "Tamim Hossain",
+      "Montasir Zamil",
+      "Nahid Hossain",
       "Al Nafeu Khan",
       "Sazzad Shakil",
     ]
-      .filter((item) => item.toLowerCase().startsWith(query.toLowerCase()))
+      .filter((item) => item.toLowerCase().includes(query.toLowerCase()))
       .slice(0, 5);
   },
 
