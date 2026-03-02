@@ -289,6 +289,40 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({
     editor?.setOptions({ editable: true });
   };
 
+  const handleExport = () => {
+    if (editor) {
+      // @ts-ignore - storage.markdown exists due to tiptap-markdown extension
+      const markdown = editor.storage.markdown.getMarkdown();
+      const blob = new Blob([markdown], { type: "text/markdown" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `document_${new Date().getTime()}.md`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+  };
+
+  const handleImport = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".md,.txt";
+    input.onchange = (e: any) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event: any) => {
+          const content = event.target.result;
+          editor?.commands.setContent(content);
+        };
+        reader.readAsText(file);
+      }
+    };
+    input.click();
+  };
+
   return (
     <div className="tiptap-ui-container" ref={containerRef}>
       <div className={`editor-card ${isEditable ? "edit-mode" : "view-mode"}`}>
@@ -313,6 +347,49 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({
           >
             {name}'s Editor
           </span>
+
+          <div style={{ display: "flex", gap: "8px" }}>
+            <button
+              className="btn"
+              onClick={handleImport}
+              style={{
+                padding: "6px 12px",
+                borderRadius: "8px",
+                fontSize: "12px",
+                background: "var(--bg-card)",
+                border: "1px solid var(--border)",
+                cursor: "pointer",
+                color: "var(--text)",
+              }}
+            >
+              Import
+            </button>
+            <button
+              className="btn"
+              onClick={handleExport}
+              style={{
+                padding: "6px 12px",
+                borderRadius: "8px",
+                fontSize: "12px",
+                background: "var(--bg-card)",
+                border: "1px solid var(--border)",
+                cursor: "pointer",
+                color: "var(--text)",
+              }}
+            >
+              Export
+            </button>
+          </div>
+
+          <div
+            style={{
+              width: "1px",
+              height: "20px",
+              background: "var(--border)",
+              margin: "0 4px",
+            }}
+          />
+
           {!readOnly && (
             <>
               {isEditable ? (

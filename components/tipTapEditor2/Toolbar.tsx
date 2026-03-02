@@ -1,5 +1,5 @@
 import { Editor } from "@tiptap/react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 interface ToolbarProps {
   editor: Editor | null;
@@ -24,56 +24,95 @@ export const Toolbar: React.FC<ToolbarProps> = ({ editor, onImageClick }) => {
     isTaskListActive: false,
   });
 
+  const updateState = useCallback(() => {
+    if (!editor) return;
+    setToolbarState({
+      isTableActive: editor.isActive("table"),
+      canInsertTable: editor.can().insertTable({ rows: 3, cols: 3 }),
+      isBoldActive: editor.isActive("bold"),
+      isItalicActive: editor.isActive("italic"),
+      isUnderlineActive: editor.isActive("underline"),
+      isStrikeActive: editor.isActive("strike"),
+      isHighlightActive: editor.isActive("highlight"),
+      isCodeActive: editor.isActive("code"),
+      isBlockquoteActive: editor.isActive("blockquote"),
+      isCodeBlockActive: editor.isActive("codeBlock"),
+      isLinkActive: editor.isActive("link"),
+      isBulletListActive: editor.isActive("bulletList"),
+      isOrderedListActive: editor.isActive("orderedList"),
+      isTaskListActive: editor.isActive("taskList"),
+    });
+  }, [editor]);
+
   useEffect(() => {
     if (!editor) return;
-
-    const updateState = () => {
-      setToolbarState({
-        isTableActive: editor.isActive("table"),
-        canInsertTable: editor.can().insertTable({ rows: 3, cols: 3 }),
-        isBoldActive: editor.isActive("bold"),
-        isItalicActive: editor.isActive("italic"),
-        isUnderlineActive: editor.isActive("underline"),
-        isStrikeActive: editor.isActive("strike"),
-        isHighlightActive: editor.isActive("highlight"),
-        isCodeActive: editor.isActive("code"),
-        isBlockquoteActive: editor.isActive("blockquote"),
-        isCodeBlockActive: editor.isActive("codeBlock"),
-        isLinkActive: editor.isActive("link"),
-        isBulletListActive: editor.isActive("bulletList"),
-        isOrderedListActive: editor.isActive("orderedList"),
-        isTaskListActive: editor.isActive("taskList"),
-      });
-    };
 
     // Initial state sync
     updateState();
 
+    // Listen for any change that should refresh the toolbar
     editor.on("transaction", updateState);
+    editor.on("selectionUpdate", updateState);
+    editor.on("blur", updateState);
+    editor.on("focus", updateState);
+
     return () => {
       editor.off("transaction", updateState);
+      editor.off("selectionUpdate", updateState);
+      editor.off("blur", updateState);
+      editor.off("focus", updateState);
     };
   }, [editor]);
 
   if (!editor || !editor.isEditable) return null;
 
   const isActive = (name: string, opts?: any) => editor.isActive(name, opts);
-  const toggleBold = () => editor.chain().focus().toggleBold().run();
-  const toggleItalic = () => editor.chain().focus().toggleItalic().run();
-  const toggleUnderline = () => editor.chain().focus().toggleUnderline().run();
-  const toggleStrike = () => editor.chain().focus().toggleStrike().run();
-  const toggleHighlight = () => editor.chain().focus().toggleHighlight().run();
+  const toggleBold = () => {
+    editor.chain().focus().toggleBold().run();
+    updateState();
+  };
+  const toggleItalic = () => {
+    editor.chain().focus().toggleItalic().run();
+    updateState();
+  };
+  const toggleUnderline = () => {
+    editor.chain().focus().toggleUnderline().run();
+    updateState();
+  };
+  const toggleStrike = () => {
+    editor.chain().focus().toggleStrike().run();
+    updateState();
+  };
+  const toggleHighlight = () => {
+    editor.chain().focus().toggleHighlight().run();
+    updateState();
+  };
 
-  const toggleBulletList = () =>
+  const toggleBulletList = () => {
     editor.chain().focus().toggleBulletList().run();
-  const toggleOrderedList = () =>
+    updateState();
+  };
+  const toggleOrderedList = () => {
     editor.chain().focus().toggleOrderedList().run();
-  const toggleTaskList = () => editor.chain().focus().toggleTaskList().run();
+    updateState();
+  };
+  const toggleTaskList = () => {
+    editor.chain().focus().toggleTaskList().run();
+    updateState();
+  };
 
-  const toggleCode = () => editor.chain().focus().toggleCode().run();
-  const toggleBlockquote = () =>
+  const toggleCode = () => {
+    editor.chain().focus().toggleCode().run();
+    updateState();
+  };
+  const toggleBlockquote = () => {
     editor.chain().focus().toggleBlockquote().run();
-  const toggleCodeBlock = () => editor.chain().focus().toggleCodeBlock().run();
+    updateState();
+  };
+  const toggleCodeBlock = () => {
+    editor.chain().focus().toggleCodeBlock().run();
+    updateState();
+  };
 
   const setLink = () => {
     if (toolbarState.isLinkActive) {

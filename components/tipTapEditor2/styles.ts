@@ -191,13 +191,13 @@ export const EDITOR_STYLES = `
 .tiptap-ui-container .group{display:inline-flex;align-items:center;gap:2px;padding-right:6px;margin-right:6px;border-right:1px solid rgba(148,163,184,.3);}
 .tiptap-ui-container .group:last-child{border-right:none;margin-right:0;padding-right:0;}
 
-.tiptap-ui-container .btn{ border-radius:7px;border:1px solid transparent;background:transparent;padding:6px 10px;font-size:14px;line-height:1;color:var(--muted);display:inline-flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;transition:.12s;min-width:32px;height:32px;white-space:nowrap; }
-.tiptap-ui-container .btn-label{font-size:13px; font-weight:500;} .tiptap-ui-container .btn-icon{font-size:16px;font-weight:600;}
-.tiptap-ui-container .btn svg{width:18px;height:18px;display:block;fill:currentColor;stroke:currentColor;}
-.tiptap-ui-container .btn svg *{fill:currentColor;stroke:currentColor;}
-.tiptap-ui-container .btn:hover{background:rgba(129,140,248,.08);border-color:var(--pill-border);color:var(--accent);}
-.tiptap-ui-container .btn.is-active{background:var(--pill-bg);border-color:var(--pill-border);color:var(--accent);box-shadow:0 0 0 1px rgba(129,140,248,.5);}
-.tiptap-ui-container .btn.icon-only{padding:0;width:26px;height:26px;}
+  .tiptap-ui-container .btn{ border-radius:7px;border:1px solid transparent;background:transparent;padding:6px 10px;font-size:14px;line-height:1;color:var(--muted);display:inline-flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;transition:.12s;min-width:32px;height:32px;white-space:nowrap;outline:none; }
+  .tiptap-ui-container .btn-label{font-size:13px; font-weight:500;} .tiptap-ui-container .btn-icon{font-size:16px;font-weight:600;}
+  .tiptap-ui-container .btn svg{width:18px;height:18px;display:block;fill:currentColor;stroke:currentColor;}
+  .tiptap-ui-container .btn svg *{fill:currentColor;stroke:currentColor;}
+  // .tiptap-ui-container .btn:hover{background:rgba(129,140,248,.04);color:var(--accent);}
+  .tiptap-ui-container .btn.is-active{background:var(--pill-bg);border-color:var(--pill-border);color:var(--accent);box-shadow:0 0 0 1px rgba(129,140,248,.5);}
+  .tiptap-ui-container .btn.icon-only{padding:0;width:26px;height:26px;}
 
 .tiptap-ui-container .file-btn{border-radius:9999px;border:1px solid var(--border);background:transparent;padding:4px 10px;font-size:11px;color:var(--muted);display:inline-flex;gap:6px;align-items:center;cursor:pointer;transition:.12s;}
 .tiptap-ui-container .file-btn-icon{font-size:12px;}

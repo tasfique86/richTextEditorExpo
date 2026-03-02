@@ -16,7 +16,7 @@ import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
 import { Markdown } from "tiptap-markdown";
 
 import Mention from "@tiptap/extension-mention";
-import suggestions from "../tipTap2/suggestions";
+import suggestions from "../tipTapEditor2/suggestions";
 import { DeleteSingleCellTable, ReorderListItems } from "./extensions";
 import { EDITOR_STYLES } from "./styles";
 import { Toolbar } from "./Toolbar";
