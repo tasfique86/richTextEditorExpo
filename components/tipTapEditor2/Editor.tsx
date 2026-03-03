@@ -90,9 +90,9 @@ https://github.com/tasfique86
 const TipTapEditor: React.FC<TipTapEditorProps> = ({
   name,
   initialContent = markdownContent,
-  initialContentFormat = "markdown",
-  theme = "light",
   onSave,
+  onExport,
+  theme = "light",
   readOnly = false,
   initialEditMode = false,
 }) => {
@@ -293,15 +293,11 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({
     if (editor) {
       // @ts-ignore - storage.markdown exists due to tiptap-markdown extension
       const markdown = editor.storage.markdown.getMarkdown();
-      const blob = new Blob([markdown], { type: "text/markdown" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `document_${new Date().getTime()}.md`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+
+      if (onExport) {
+        onExport(markdown);
+        return;
+      }
     }
   };
 
